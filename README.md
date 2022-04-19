@@ -8,8 +8,8 @@ Used FastText vectorization and 1D Keras CNN model to classify text word-wise an
 
 # Results
 
-Accuracy: 0.89
-Macro Avg Accuracy:  0.78
+Accuracy: 0.91
+Macro Avg Accuracy:  0.80
 
 Classification report can be seen in notebook 02.
 
