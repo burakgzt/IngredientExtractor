@@ -11,6 +11,9 @@ from tensorflow import keras
 class IngredientExtractor():
     
     def __init__(self, keras_model_path):
+        """
+            Init script and load models.
+        """
         self.ft_model = fasttext.load_model('cc.en.300.bin')
         self.model = keras.models.load_model(keras_model_path)
         
@@ -41,6 +44,16 @@ class IngredientExtractor():
     def predict(self, text):
         """
             Prediction function
+
+            Parameters
+            ----------
+            text : str
+                String to create prediction
+                
+            Returns
+            -------
+            [str]
+                List of ingredient words
         """
         # Get target word list
         targets = self.recipe_to_target_words(text)
@@ -64,6 +77,16 @@ class IngredientExtractor():
     def post_filter(self, items):    
         """
             Post filtering function of n-gram results. to have clear text
+
+            Parameters
+            ----------
+            items : [str]
+                List of words predicted with keras model.
+                
+            Returns
+            -------
+            [str]
+                Filtered list of words.
         """
 
         # Seperate multiple words by comma & "and" word
@@ -95,6 +118,16 @@ class IngredientExtractor():
     def find_ingredients_single_text(self, text):
         """
             Returns ingredient list for single text
+
+            Parameters
+            ----------
+            text : str
+                String to find ingredients
+                
+            Returns
+            -------
+            [(word: str,start_index: int,end_index: int)]
+                Filtered list of ingredients and start end poses.
         """
         ingredients = self.post_filter(self.predict(text))
 
@@ -105,6 +138,19 @@ class IngredientExtractor():
         return matches
 
     def create_result_from_object(self, json):
+        """
+            Creates prediction output for given json.
+
+            Parameters
+            ----------
+            json : dict
+                Dictionary of recipies. e.g. { "recipe1": "","recipe2": ""}
+                
+            Returns
+            -------
+            dict
+                Dictionary with same keys as input with ingredient values.
+        """
         result = {}
         for key in json:
             result[key] = self.find_ingredients_single_text(json[key])
